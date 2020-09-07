@@ -2,9 +2,9 @@ import requests
 from bs4 import BeautifulSoup
 import urllib
 import os.path
-#from Web_crawler_bbc import BBC
+
 url = "https://abcnews.go.com/"
-save_path = 'E:\study\其他\实习\web crawler'
+save_path = 'E:\study\其他\实习\web crawler' #add your own path here
 #request header
 response = requests.get(url)
 #analyze websource code, and acquire titles
@@ -21,24 +21,24 @@ for title in titles:
             response = requests.get(url)
             soup = BeautifulSoup(response.text, "html.parser")
 
-            #date:
+            #crawl date:
             content = soup.find('meta', { 'property': 'lastPublishedDate' })
             print(content['content'])
-            #json.loads(soup.find('script', {'type': 'application/ld+json'}).get_text())
-            #content:
+            
+            #crawl content:
             list = [p.text for p in soup.body.find_all("p")]
-            #print(list)
-            path = save_path + '\Article'
+          
+            path = save_path + '\Article' #save content into Article file as .txt format
             completeName = os.path.join(path, str(index)+".txt")
             file1 = open(completeName, "w")
             with file1 as output:
                 output.write(str(list))
             file1.close()
-            #image:
+            #crawl image:
             try:
                 ImUrl = soup.find('meta', {'property':'og:image'})['content']
                 #print(ImUrl)
-                path2 = save_path + '\image'
+                path2 = save_path + '\image'    #save content into Article file as .jpg format
                 completeName2 = os.path.join(path2, str(index)+".jpg")
                 f = open(completeName2, 'wb')
                 request = urllib.request.urlopen(ImUrl)
